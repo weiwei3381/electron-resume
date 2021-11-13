@@ -40,5 +40,6 @@ module.exports = {
     '@typescript-eslint/no-invalid-this': 'off',
     'react/jsx-key': 0,
     'no-undef': 0,
+    semi: ['error', 'never'],
   },
-};
+}
