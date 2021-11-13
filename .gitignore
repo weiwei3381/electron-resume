@@ -1,0 +1,9 @@
+node_modules
+.idea/*
+.templaterc.js
+template
+dist
+# mac自动生成的文件
+.DS_Store
+# 编辑器配置文件
+.vscode
