@@ -2,12 +2,19 @@
  * @desc electron 主入口
  */
 import path from 'path'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 function isDev() {
   // 👉 还记得我们配置中通过 webpack.DefinePlugin 定义的构建变量吗
   return process.env.NODE_ENV === 'development'
 }
+
+// 获得应用根目录
+const ROOT_PATH = path.join(app.getAppPath(), '../')
+// 👇 监听渲染进程发的消息并回复
+ipcMain.on('get-root-path', (event, arg) => {
+  event.reply('reply-root-path', ROOT_PATH)
+})
 
 function createWindow() {
   // 创建浏览器窗口
@@ -19,7 +26,9 @@ function createWindow() {
       nodeIntegration: true,
     },
   })
-
+  // 打开开发者工具
+  mainWindow.webContents.openDevTools()
+  // 加载内容
   if (isDev()) {
     // 👇 看到了吗，在开发环境下，我们加载的是运行在 7001 端口的 React
     mainWindow.loadURL(`http://127.0.0.1:7001`)

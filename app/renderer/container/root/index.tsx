@@ -1,12 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './index.less'
 import { useHistory } from 'react-router'
 import Logo from '@assets/logo.png'
 import { shell } from 'electron'
 import { ROUTER_ENTRY, ROUTER_KEY } from '@common/constants/router'
 import { isHttpOrHttpsUrl } from '@common/utils/router'
+import { useSelector, useDispatch } from 'react-redux'
 
 function Root() {
+  const dispath = useDispatch()
+  const appName = useSelector((state: any) => state.globalModel.appName)
+
+  useEffect(() => {
+    setTimeout(() => {
+      console.log('3s后修改')
+      dispath({
+        type: 'globalModel/setStore',
+        payload: {
+          key: 'appName',
+          values: 'wowbat简历',
+        },
+      })
+    }, 3000)
+  }, [])
+
+  useEffect(() => {
+    console.log(appName)
+  }, [appName])
+
   // 👇 通过 history.push 进行跳转
   const history = useHistory()
 
@@ -27,11 +48,12 @@ function Root() {
         <img src={Logo} alt="" />
         <div styleName="title" />
         <div styleName="tips">一个模板简历制作平台, 让你的简历更加出众 ~</div>
+        <div>{appName}</div>
         <div styleName="action">
-          {['介绍', '简历', '源码'].map((text, index) => {
+          {ROUTER_ENTRY.map((router: TSRouter.Item) => {
             return (
-              <div key={index} styleName="item" onClick={() => onRouterToLink(text)}>
-                {text}
+              <div key={router.key} styleName="item" onClick={() => onRouterToLink(router)}>
+                {router.text}
               </div>
             )
           })}
